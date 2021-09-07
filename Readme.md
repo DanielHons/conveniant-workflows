@@ -2,6 +2,8 @@
 ## Basics
 The "main" branch is considered to be master. It does not matter how the repositories main branch in git is configured, release versions will be determined by the diff to master, and after a successful release it will merged into master.
 
+You will need to provide a Personal Access Token as a secret. Otherwise workflows are not able to trigger other workflows.
+
 ## Wokflows
 ### Stage branch for release
 Trigger: manual
