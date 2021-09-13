@@ -40,6 +40,8 @@ jobs:
           CHANGELOG: ${{ steps.tag_version.outputs.changelog }}
         # Sample: Replace TICKET-73268 with a link to such tickets
         run: |
+          echo $CHANGELOG > release_changelog
+          cat release_changelog
           echo "--1---"
           echo $CHANGELOG
           echo "--2---"
