@@ -1,0 +1,43 @@
+# When run on release-branches like 'release/v{TAG}', this pipeline adds the tag v{TAG} without postfix to the head of
+# the release branch, creates a github release with changelog from conventional commits and merges it into master.
+
+name: 'Release'
+on:
+  push:
+    branches:
+      - reltest
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5.6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.tags.outputs.relTag }}
+          tag_prefix: ""
+      - name: Enhance changelog
+        id: changelog
+        env:
+          CHANGELOG: ${{ steps.tag_version.outputs.changelog }}
+        # Sample: Replace TICKET-73268 with a link to such tickets
+        run: |
+          echo "$CHANGELOG" > release_changelog
+          cat release_changelog
+          echo "--1---"
+          echo "$CHANGELOG"
+          echo "--2---"
+          echo "$CHANGELOG" |  sed "s/TT-\([0-9]*\)/[TT-\1](https:\/\/tickets.customer.com\/browse\/TT-\1)/g"
+          echo "--3---"
+          newChangelog=$(echo "$CHANGELOG" |  sed "s/TT-\([0-9]*\)/[TT-\1](https:\/\/tickets.customer.com\/browse\/TT-\1)/g")
+          echo $newChangeLog > release_changelog.md
+          cat release_changelog.md
+          echo "--4---"
+          echo "::set-output name=enhanced::$newChangelog"
+
