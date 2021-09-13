@@ -45,9 +45,9 @@ jobs:
           echo "--1---"
           echo $CHANGELOG
           echo "--2---"
-          echo $CHANGELOG |  sed "s/TICKET-\([0-9]*\)/[DD-\1](https:\/\/tickets.customer.com\/browse\/TICKET-\1)/g"
+          echo $CHANGELOG |  sed "s/TT-\([0-9]*\)/[TT-\1](https:\/\/tickets.customer.com\/browse\/TT-\1)/g"
           echo "--3---"
-          newChangelog=$(echo $CHANGELOG |  sed "s/TICKET-\([0-9]*\)/[DD-\1](https:\/\/tickets.customer.com\/browse\/TICKET-\1)/g")
+          newChangelog=$(echo $CHANGELOG |  sed "s/TT-\([0-9]*\)/[TT-\1](https:\/\/tickets.customer.com\/browse\/TT-\1)/g")
           echo $newChangeLog > release_changelog.md
           cat release_changelog.md
           echo "--4---"
