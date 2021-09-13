@@ -40,14 +40,14 @@ jobs:
           CHANGELOG: ${{ steps.tag_version.outputs.changelog }}
         # Sample: Replace TICKET-73268 with a link to such tickets
         run: |
-          newChangelog=$(echo $changelog |  sed "s/TICKET-\([0-9]*\)/[DD-\1](https:\/\/tickets.customer.com\/browse\/TICKET-\1)/g")
+          newChangelog=$(echo $changelog |  sed "s/TICKET-\([0-9]*\)/[DD-\1](https:\/\/tickets.customer.com\/browse\/TICKET-\1)/g") > release_changelog.md
           echo "::set-output name=enhanced::$newChangelog"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.tags.outputs.relTag }}
           name: ${{ steps.tags.outputs.relTag }}
-          body: ${{ steps.changelog.outputs.enhanced }}
+          body_file: release_changelog.md
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Merge  -> master
         uses: tukasz/direct-merge-action@master
