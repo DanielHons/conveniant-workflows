@@ -34,12 +34,20 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ steps.tags.outputs.relTag }}
           tag_prefix: ""
+      - name: Enhance changelog
+        id: changelog
+        env:
+          CHANGELOG: ${{ steps.tag_version.outputs.changelog }}
+        # Sample: Replace TICKET-73268 with a link to such tickets
+        run: |
+          newChangelog=$(echo $changelog |  sed "s/TICKET-\([0-9]*\)/[DD-\1](https:\/\/tickets.customer.com\/browse\/TICKET-\1)/g")
+          echo "::set-output name=enhanced::$newChangelog"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.tags.outputs.relTag }}
           name: ${{ steps.tags.outputs.relTag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+          body: ${{ steps.changelog.outputs.enhanced }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Merge  -> master
         uses: tukasz/direct-merge-action@master
