@@ -57,7 +57,7 @@ jobs:
         with:
           tag_name: ${{ steps.tags.outputs.relTag }}
           name: ${{ steps.tags.outputs.relTag }}
-          body_path: release_changelog.md
+          body: ${{ steps.tag_version.outputs.changelog }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Merge  -> master
         uses: tukasz/direct-merge-action@master
