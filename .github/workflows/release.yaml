@@ -40,7 +40,14 @@ jobs:
           CHANGELOG: ${{ steps.tag_version.outputs.changelog }}
         # Sample: Replace TICKET-73268 with a link to such tickets
         run: |
+          echo "--1---"
+          echo $changelog
+          echo "--2---"
+          cho $changelog |  sed "s/TICKET-\([0-9]*\)/[DD-\1](https:\/\/tickets.customer.com\/browse\/TICKET-\1)/g"
+          echo "--3---"
           newChangelog=$(echo $changelog |  sed "s/TICKET-\([0-9]*\)/[DD-\1](https:\/\/tickets.customer.com\/browse\/TICKET-\1)/g") > release_changelog.md
+          cat release_changelog.md
+          echo "--4---"
           echo "::set-output name=enhanced::$newChangelog"
       - name: Release
         uses: softprops/action-gh-release@v1
