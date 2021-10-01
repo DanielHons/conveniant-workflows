@@ -53,7 +53,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           prerelease: true
-          tag_name: ${{ steps.tags.outputs.relTag }}
+          tag_name: ${{ steps.tags.outputs.current }}
           name: ${{ steps.tags.outputs.relTag }}
           body_path: release_changelog.md
           token: ${{ secrets.GITHUB_TOKEN }}
