@@ -39,3 +39,21 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ steps.tags.outputs.current }}
           tag_prefix: ""
+
+      - name: Enhance changelog
+        id: changelog
+        env:
+          CHANGELOG: ${{ steps.tag_version.outputs.changelog }}
+        # Sample: Replace TT-73268 with a link to such tickets
+        run: |
+          newChangelog="$(echo "$CHANGELOG" |  sed "s/TT-\([0-9]*\)/[TT-\1](https:\/\/tickets.customer.com\/browse\/TT-\1)/g")"
+          echo "$newChangelog" > release_changelog.md
+          echo "::set-output name=enhanced::$newChangelog"
+      - name: Pre-Release
+        uses: softprops/action-gh-release@v1
+        with:
+          prerelease: true
+          tag_name: ${{ steps.tags.outputs.current }}
+          name: ${{ steps.tags.outputs.relTag }}
+          body_path: release_changelog.md
+          token: ${{ secrets.GITHUB_TOKEN }}
