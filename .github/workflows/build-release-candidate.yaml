@@ -23,7 +23,7 @@ jobs:
           sha=$(git rev-list --tags --max-count=1)
           echo "sha: $sha"
           [[ $sha == "" ]] && lastTag=NONE &&
-          [[ $sha == "" ]] || lastTag="$(git describe --abbrev=0 --tags)"
+          [[ $sha == "" ]] || lastTag="$(git describe --abbrev=0 --tags $sha)"
           echo "::set-output name=previous::$lastTag"
           if [[ $lastTag =~ $branchTag-rc\.([0-9]*) ]]; then
               current="$branchTag-rc.$((BASH_REMATCH[1]+1))"
@@ -32,6 +32,19 @@ jobs:
           fi
           echo $current
           echo "::set-output name=current::$current"
+
+      - uses: mukunku/tag-exists-action@v1.0.0
+        id: checkTag
+        with:
+          tag: ${{ steps.tags.outputs.current }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fail if tag exists
+        if: ${{ steps.checkTag.outputs.exists }}
+        run: |
+          echo "Tag already exists"
+          exit 1
+
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.6
