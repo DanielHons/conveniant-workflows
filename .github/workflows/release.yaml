@@ -57,6 +57,11 @@ jobs:
           source-branch: ${{ steps.tags.outputs.releaseBranch }}
           target-branch: master
           commit-message: "Release ${{ steps.tags.outputs.relTag }}"
+      - name: Delete release branch
+        env:
+          branch: ${{ steps.tags.outputs.releaseBranch }}
+        run: |
+          git push -d origin $branch
       - name: Create PR master --> develop
         uses: repo-sync/pull-request@v2
         with:
