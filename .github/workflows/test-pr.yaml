@@ -1,0 +1,16 @@
+name: Test Pull Request
+on:
+  pull_request_target:
+    branches:
+      - develop
+      - master
+      - release/v*
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Tests (Missing)
+        run: |
+          echo "TODO Execute your tests here"

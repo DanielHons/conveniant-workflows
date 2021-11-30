@@ -54,3 +54,58 @@ So if the source branch (on which you run this workflow) is named `release/v3.11
 - create a hotfix branch from develop
 - run `Stage branch for release` on your hotfix branch
 - For accepting a pending hotfix, run `Release` on the release branch created from pre-release
+
+
+
+### Snippets
+#### Re-Tag docker image
+```
+      - id: repostring
+        uses: ASzc/change-string-case-action@v1
+        with:
+          string: ${{ github.repository }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Re-Tag docker image
+        env:
+          OLD_TAG: ${{ steps.tags.outputs.preRelTag }}
+          NEW_TAG: ${{ steps.tags.outputs.relTag }}
+          REGISTRY: ${{env.DOCKER_REGISTRY }}
+          REPOSITORY: ${{ steps.repostring.outputs.lowercase }}
+        run: |
+          docker pull $REGISTRY/$REPOSITORY:$OLD_TAG
+          docker image tag $REGISTRY/$REPOSITORY:$OLD_TAG $REGISTRY/$REPOSITORY:$NEW_TAG
+          docker push $REGISTRY/$REPOSITORY:$NEW_TAG
+```
+
+#### Transfer Binary
+```
+      - name: Create asset folder
+        run: mkdir asset
+
+      - id: download-release-asset
+        name: Download release asset-1
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          version: tags/${{ steps.tags.outputs.preRelTag }}
+          file: ${{ env.APP_NAME }}.linux.amd64
+          target: asset/${{ env.APP_NAME }}.linux.amd64
+          token: ${{ secrets.CI_PAT }}
+          
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tags.outputs.relTag }}
+          name: ${{ steps.tags.outputs.relTag }}
+          body_path: release_changelog.md
+          token: ${{ secrets.CI_PAT }}
+          files: |
+            asset/${{ env.APP_NAME }}.linux.amd64
+
+```

@@ -20,18 +20,29 @@ jobs:
         run: |
           releaseBranch=$(git branch --show-current | grep release/v*)
           branchTag=${releaseBranch#release/}
-          sha=$(git rev-list --tags --max-count=1)
-          echo "sha: $sha"
-          [[ $sha == "" ]] && lastTag=NONE &&
-          [[ $sha == "" ]] || lastTag="$(git describe --abbrev=0 --tags)"
-          echo "::set-output name=previous::$lastTag"
+          lastTag=$(git describe --match "$branchTag-rc.[0-9]*" --abbrev=0 HEAD) || lastTag=NONE
           if [[ $lastTag =~ $branchTag-rc\.([0-9]*) ]]; then
-              current="$branchTag.rc-$((BASH_REMATCH[1]+1))"
+            current="$branchTag-rc.$((BASH_REMATCH[1]+1))"
           else
-              current="$branchTag-rc.1"
+            current="$branchTag-rc.0"
           fi
+
           echo $current
+          echo "::set-output name=previous::$lastTag"
           echo "::set-output name=current::$current"
+
+      - uses: mukunku/tag-exists-action@v1.0.0
+        id: checkTag
+        with:
+          tag: ${{ steps.tags.outputs.current }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fail if tag exists
+        if: steps.checkTag.outputs.exists == 'true'
+        run: |
+          echo "Tag already exists"
+          exit 1
+
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.6
