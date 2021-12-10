@@ -2,7 +2,7 @@
 # like v{TAG}.rc-{n}
 
 
-name: 'Build release candidate'
+name: '⚙️ Build release candidate'
 on:
   push:
     branches:

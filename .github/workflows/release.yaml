@@ -1,7 +1,7 @@
 # When run on release-branches like 'release/v{TAG}', this pipeline adds the tag v{TAG} without postfix to the head of
 # the release branch, creates a github release with changelog from conventional commits and merges it into master.
 
-name: 'Release'
+name: '🤚 Create release'
 on:
   workflow_dispatch:
 
