@@ -69,4 +69,5 @@ jobs:
           source_branch: "master"
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_label: "feature, automated pr"
+          pr_allow_empty: true
           pr_title: "Merge master into develop after release ${{ steps.tags.outputs.relTag }}"
