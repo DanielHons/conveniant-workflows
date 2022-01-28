@@ -1,7 +1,7 @@
 # When run on release-branches like 'release/v{TAG}', this pipeline adds the tag v{TAG} without postfix to the head of
 # the release branch, creates a github release with changelog from conventional commits and merges it into master.
 
-name: 'Release'
+name: '🤚 Create release'
 on:
   workflow_dispatch:
 
@@ -38,9 +38,10 @@ jobs:
         id: changelog
         env:
           CHANGELOG: ${{ steps.tag_version.outputs.changelog }}
-        # Sample: Replace TT-73268 with a link to such tickets
+          JIRA_PROJECT: TT
+          JIRA_HOST: tickets.customer.com
         run: |
-          newChangelog="$(echo "$CHANGELOG" |  sed "s/TT-\([0-9]*\)/[TT-\1](https:\/\/tickets.customer.com\/browse\/TT-\1)/g")"
+          newChangelog="$(echo "$CHANGELOG" |  sed "s/$JIRA_PROJECT-\([0-9]*\)/[$JIRA_PROJECT-\1](https:\/\/$JIRA_HOST\/browse\/$JIRA_PROJECT-\1)/g")"
           echo "$newChangelog" > release_changelog.md
           echo "::set-output name=enhanced::$newChangelog"
       - name: Release
@@ -69,4 +70,5 @@ jobs:
           source_branch: "master"
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_label: "feature, automated pr"
+          pr_allow_empty: true
           pr_title: "Merge master into develop after release ${{ steps.tags.outputs.relTag }}"

@@ -1,4 +1,4 @@
-name: "Stage branch for release"
+name: "🤚 Stage branch for release"
 
 on:
   workflow_dispatch:
