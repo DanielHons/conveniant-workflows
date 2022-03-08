@@ -57,7 +57,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           source-branch: ${{ steps.tags.outputs.releaseBranch }}
           target-branch: master
-          commit-message: "Release ${{ steps.tags.outputs.relTag }}"
+          commit-message: "chore(release): ${{ steps.tags.outputs.relTag }}"
       - name: Delete release branch
         env:
           branch: ${{ steps.tags.outputs.releaseBranch }}
