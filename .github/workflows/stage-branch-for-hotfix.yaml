@@ -52,5 +52,5 @@ jobs:
           # Use another token then GITHUB_TOKEN to trigger subsequent workflows
           GITHUB_TOKEN: ${{ secrets.CI_PAT }}
         with:
-          branch: ${{ steps.hotfix.branch-name }}
+          branch: ${{ steps.hotfix.outputs.branch-name }}
 
