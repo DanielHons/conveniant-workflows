@@ -34,7 +34,7 @@ jobs:
       - name: Assert branch does not exist yet
         id: branch-exists
         env:
-          branch: ${{ steps.hotfix.branch-name }}
+          branch: ${{ steps.hotfix.outputs.branch-name }}
         run: |
           branchExists=$(git ls-remote --heads origin ${branch})
 
