@@ -78,7 +78,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           source-branch: ${{ steps.extract_branch.outputs.branch }}
           target-branch: master
-          commit-message: "chore(release): Hotfix ${{ steps.tags.outputs.relTag }}"
+          commit-message: "chore(release): Hotfix ${{ steps.tags.outputs.hotfixTag }}"
       - name: Delete release branch
         env:
           branch: ${{ steps.extract_branch.outputs.branch }}
