@@ -5,6 +5,12 @@
 name: '🤚 🚨 Branch to hotfix'
 on:
   workflow_dispatch:
+    inputs:
+      delete-source-branch:
+        description: Delete the source branch after merge into master
+        type: boolean
+        required: false
+        default: false
 jobs:
   pre-release:
     runs-on: ubuntu-latest
@@ -80,6 +86,7 @@ jobs:
           target-branch: master
           commit-message: "chore(release): Hotfix ${{ steps.tags.outputs.hotfixTag }}"
       - name: Delete release branch
+        if: github.event.inputs.delete-source-branch == 'true'
         env:
           branch: ${{ steps.extract_branch.outputs.branch }}
         run: |
