@@ -21,10 +21,11 @@ jobs:
         id: tags
         run: |
           lastTag=$(git describe --abbrev=0 HEAD) || lastTag=NONE
+          mainTag=$(echo $lastTag | cut -f1 -d"-")
           if [[ $lastTag =~ $branchTag-hotfix\.([0-9]*) ]]; then
-            current="$branchTag-hotfix.$((BASH_REMATCH[1]+1))"
+            current="$mainTag-hotfix.$((BASH_REMATCH[1]+1))"
           else
-            current="$branchTag-hotfix.0"
+            current="$mainTag-hotfix.0"
           fi
 
           echo $current
@@ -77,10 +78,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           source-branch: ${{ steps.extract_branch.outputs.branch }}
           target-branch: master
-          commit-message: "chore(release): Hotfix ${{ steps.tags.outputs.relTag }}"
+          commit-message: "chore(release): Hotfix ${{ steps.tags.outputs.hotfixTag }}"
       - name: Delete release branch
         env:
-          branch: ${{ steps.tags.outputs.releaseBranch }}
+          branch: ${{ steps.extract_branch.outputs.branch }}
         run: |
           git push -d origin $branch
       - name: Create PR master --> develop
