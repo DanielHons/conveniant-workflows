@@ -81,7 +81,7 @@ jobs:
           commit-message: "chore(release): Hotfix ${{ steps.tags.outputs.relTag }}"
       - name: Delete release branch
         env:
-          branch: ${{ steps.tags.outputs.releaseBranch }}
+          branch: ${{ steps.extract_branch.outputs.branch }}
         run: |
           git push -d origin $branch
       - name: Create PR master --> develop
