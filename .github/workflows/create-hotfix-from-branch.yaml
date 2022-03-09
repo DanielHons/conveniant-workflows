@@ -21,7 +21,7 @@ jobs:
         id: tags
         run: |
           lastTag=$(git describe --abbrev=0 HEAD) || lastTag=NONE
-          mainTag=$(echo lastTag | cut -f1 -d"-")
+          mainTag=$(echo $lastTag | cut -f1 -d"-")
           if [[ $lastTag =~ $branchTag-hotfix\.([0-9]*) ]]; then
             current="$mainTag-hotfix.$((BASH_REMATCH[1]+1))"
           else
