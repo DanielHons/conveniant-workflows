@@ -4,9 +4,7 @@
 
 name: '🤚 🚨 Branch to hotfix'
 on:
-  push:
-    branches:
-      - 'release/v*'
+  workflow_dispatch:
 jobs:
   pre-release:
     runs-on: ubuntu-latest
