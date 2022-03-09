@@ -51,10 +51,17 @@ So if the source branch (on which you run this workflow) is named `release/v3.11
 
 
 ### Hotfixes
-- create a hotfix branch from develop
+#### Option 1 
+- create a hotfix branch from master
 - run `Stage branch for release` on your hotfix branch
 - For accepting a pending hotfix, run `Release` on the release branch created from pre-release
 
+#### Option 2
+- create a branch from master including your hotfix
+- run "create hotfix from branch" on that branch.
+
+Option 2 creates tags like x.y.z-hotfix.n, while option 1 is the usual release cycle.
+Option 1 might lead to collissions, if there is already a release branch for the version to be created.
 
 
 ### Snippets
