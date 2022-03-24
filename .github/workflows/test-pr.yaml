@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Load workflow config
+        run: cat .github/workflow-config.env >> $GITHUB_ENV
       - name: Tests (Missing)
         run: |
           echo "TODO Execute your tests here"
