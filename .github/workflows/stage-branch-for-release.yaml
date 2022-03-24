@@ -11,8 +11,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Load workflow config
-        run: cat .github/workflow-config.env >> $GITHUB_ENV
       - name: Display receiver
         run: echo ${GITHUB_REF#refs/heads/}
 
