@@ -25,12 +25,12 @@ jobs:
           echo "::set-output name=preRelTag::$headTag"
           echo "::set-output name=releaseBranch::$releaseBranch"
 
-      - name: Re-Tag Relese
+      - name: (TODO) Re-Tag Artifact
         id: retag
         env:
           relTag: ${{ steps.tags.outputs.relTag }}
           preRelTag: ${{ steps.tags.outputs.preRelTag }}
-        run: echo "Adding tag $relTag to image with tag $preRelTag"
+        run: .github/scripts/retag.sh
 
       - name: Bump version and push tag
         id: tag_version
