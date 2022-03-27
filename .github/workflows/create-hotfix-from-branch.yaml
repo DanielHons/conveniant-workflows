@@ -62,10 +62,11 @@ jobs:
 
       - name: Enhance changelog
         id: changelog
+        if: env.JIRA_PROJECT != ''
         env:
           CHANGELOG: ${{ steps.tag_version.outputs.changelog }}
-          JIRA_PROJECT: TT
-          JIRA_HOST: tickets.customer.com
+          JIRA_PROJECT: "${{ env.JIRA_PROJECT }}"
+          JIRA_HOST:  "${{ env.JIRA_HOST }}"
         run: |
           newChangelog="$(echo "$CHANGELOG" |  sed "s/$JIRA_PROJECT-\([0-9]*\)/[$JIRA_PROJECT-\1](https:\/\/$JIRA_HOST\/browse\/$JIRA_PROJECT-\1)/g")"
           echo "$newChangelog" > release_changelog.md
